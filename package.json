@@ -1,0 +1,25 @@
+{
+  "name": "biblioteca-back",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/PedroMatos-01/biblioteca-back.git",
+  "author": "Pedro Matos <ph9876543210p@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon src/server.js"
+  },
+  "dependencies": {
+    "dotenv": "^18.0.5",
+    "express": "^5.2.1",
+    "mysql2": "^3.24.5",
+    "nodemon": "^3.1.14",
+    "sequelize": "^6.37.8"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.12.0",
+    "globals": "^17.13.0",
+    "sequelize-cli": "^6.6.5",
+    "start": "^5.1.0"
+  }
+}
