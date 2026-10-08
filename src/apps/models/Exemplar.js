@@ -12,6 +12,7 @@ class Exemplar extends Model{
             },
             {
                 sequelize,
+                tableName: 'exemplares',
             }
         );
         return this;
