@@ -15,7 +15,7 @@ class LivroController {
         return res.json(livro);
     }
 
-    async store(req,res){
+    async create(req,res){
         const { titulo , autor } = req.body;
         if(!titulo || !autor){
             return res.status(400).json({

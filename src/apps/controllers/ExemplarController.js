@@ -17,7 +17,7 @@ class ExemplarController {
         return res.json(exemplar);
     }
 
-    async store(req, res) {
+    async create(req, res) {
         const { livro_id } = req.params;
         const { codigo } = req.body;
         if (!codigo) {
