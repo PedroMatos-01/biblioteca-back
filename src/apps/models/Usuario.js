@@ -33,7 +33,7 @@ class Usuario extends Model{
     toJSON() {
         const valores = { ...this.get() };
         delete valores.senha;
-        delete valores.senha_hash;   // faltava remover o hash da resposta
+        delete valores.senha_hash; 
         return valores;
     }
 }
