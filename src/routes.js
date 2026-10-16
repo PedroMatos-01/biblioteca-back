@@ -1,5 +1,9 @@
 const { Router } = require('express');
 const routes = new Router();
+const authorization = require('./apps/middlewares/authorization');
+
+
+
 
 const ExemplarControllers = require('./apps/controllers/ExemplarController');
 const LivroControllers = require('./apps/controllers/LivroControllers');
@@ -15,18 +19,41 @@ routes.post('/usuarios', UsuarioController.create);
 routes.post('/auth', AuthController.authentication);
 
 
+
+
 routes.use(AutheticationMiddleware);
+
+
 
 routes.get('/livros', LivroControllers.index);
 routes.get('/livros/:id', LivroControllers.show);
-routes.post('/livros', LivroControllers.create);
-routes.put('/livros/:id', LivroControllers.update);
-routes.delete('/livros/:id', LivroControllers.delete);
+routes.post('/livros',authorization('administrador'), LivroControllers.create);
+routes.put('/livros/:id',authorization('administrador'), LivroControllers.update);
+routes.delete('/livros/:id',authorization('administrador'), LivroControllers.delete);
+
+
+
 
 routes.get('/livros/:livro_id/exemplares', ExemplarControllers.index);
-routes.post('/livros/:livro_id/exemplares', ExemplarControllers.create);
+routes.post('/livros/:livro_id/exemplares',
+    authorization('administrador'),
+    ExemplarControllers.create
+);
 routes.get('/exemplares/:id', ExemplarControllers.show);
-routes.put('/exemplares/:id', ExemplarControllers.update);
-routes.delete('/exemplares/:id', ExemplarControllers.delete);
+routes.put('/exemplares/:id', authorization('administrador'),ExemplarControllers.update);
+routes.delete('/exemplares/:id',authorization('administrador'), ExemplarControllers.delete);
+
+
+
+
+routes.get('/usuarios/me', UsuarioController.me);
+routes.get('/usuarios', authorization('administrador'), UsuarioController.index);
+routes.patch('/usuarios/:id/perfil',
+    authorization('administrador'),
+    UsuarioController.updatePerfil
+);
+routes.delete('/usuarios/:id', UsuarioController.delete);
+
+
 
 module.exports = routes;
