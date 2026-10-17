@@ -11,6 +11,8 @@ class Usuario extends Model{
                 senha: Sequelize.VIRTUAL,
                 senha_hash: Sequelize.STRING,
                 perfil: Sequelize.STRING,
+                reset_token_hash: Sequelize.STRING,
+                reset_token_expires: Sequelize.DATE,
             },
             {
                 sequelize,
@@ -34,6 +36,8 @@ class Usuario extends Model{
         const valores = { ...this.get() };
         delete valores.senha;
         delete valores.senha_hash; 
+        delete valores.reset_token_hash;
+        delete valores.reset_token_expires;
         return valores;
     }
 }

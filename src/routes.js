@@ -16,9 +16,11 @@ routes.get('/health', (req, res) => {
     return res.send({ message: 'Connected withew sucesse' });
 });
 routes.post('/usuarios', UsuarioController.create);
+
+
 routes.post('/auth', AuthController.authentication);
-
-
+routes.post('/auth/esqueci-senha', AuthController.forgotPassword);
+routes.post('/auth/redefinir-senha', AuthController.resetPassword);
 
 
 routes.use(AutheticationMiddleware);
