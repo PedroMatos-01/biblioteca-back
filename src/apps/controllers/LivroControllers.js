@@ -1,4 +1,4 @@
-
+const Exemplar = require("../models/Exemplar");
 const Livros = require('../models/Livros');
 class LivroController {
 
@@ -37,14 +37,38 @@ class LivroController {
         return res.json(livro);
     }
 
-    async delete(req,res){
-        const livro = await Livros.findByPk(req.params.id);
-        if (!livro) {
-            return res.status(404).json({ erro: 'Livro não encontrado' });
-        }
-        await livro.destroy();
-        return res.status(204).send();
+
+async delete(request, response) {
+  try {
+    if (request.perfil !== "administrador") {
+      return response.status(403).json({
+        mensagem: "Apenas administradores podem excluir livros"
+      });
     }
+
+    const livro = await Livros.findByPk(request.params.id);
+
+    if (!livro) {
+      return response.status(404).json({ mensagem: "Livro nao encontrado" });
+    }
+
+    const quantidadeExemplares = await Exemplar.count({
+      where: { livro_id: livro.id }
+    });
+
+    if (quantidadeExemplares > 0) {
+      return response.status(409).json({
+        mensagem: "Remova os exemplares antes de excluir o livro"
+      });
+    }
+
+    await livro.destroy();
+    return response.status(204).send();
+  } catch (erro) {
+    console.error(erro);
+    return response.status(500).json({ mensagem: "Erro interno do servidor" });
+  }
+}
 }
 
 
