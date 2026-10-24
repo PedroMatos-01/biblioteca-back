@@ -6,9 +6,8 @@ class Emprestimo extends Model {
         super.init(
             {
                 usuario_id: Sequelize.INTEGER,
-                exemplar_id: Sequelize.INTEGER,
                 renovacoes: Sequelize.INTEGER,
-                
+
                 data_retirada: {
                     type: Sequelize.DATE,
                     allowNull: false
@@ -28,6 +27,11 @@ class Emprestimo extends Model {
                     type: Sequelize.STRING,
                     allowNull: false,
                     defaultValue: 'ativo'
+                },
+                
+                exemplar_id: {
+                    type: Sequelize.INTEGER,
+                    allowNull: false,
                 },
 
             },
