@@ -5,25 +5,20 @@ async function criarEmprestimo(idUsuario, idExemplar) {
     const transacao = await Exemplar.sequelize.transaction();
 
   try {
-    // 1. Buscar o exemplar. Se não existir -> erro 404
 
     const exemplar = await Exemplar.findByPk(idExemplar, { transaction: transacao }); 
-    //prucura no banco , se nao encontrado exemplar=null
     if(!exemplar){
         const erro = new Error("Exemplar nao encontrado");
         erro.status = 404;
-        throw erro;//vai para o catch dando erro 
+        throw erro;
     }
 
-    // 2. Se o status não for "disponivel" -> erro 409 (conflito)
     if (exemplar.status !== "disponivel" ) {
         const erro = new Error("Exemplar indisponível");
         erro.status = 409;
         throw erro;
     }
 
-
-    // 3. Contar os empréstimos ativos do usuário. Se já tem 3 -> erro 400
 
     const qntdEmprestimo = await Emprestimo.count({
         where: {
@@ -39,14 +34,11 @@ async function criarEmprestimo(idUsuario, idExemplar) {
         throw erro;
     }
 
-    // 4. Calcular dataRetirada (hoje) e dataPrevista (hoje + 14 dias)
-
     const hoje = new Date();
     const dataPrevista = new Date(hoje);
     dataPrevista.setDate(dataPrevista.getDate() + 14);
 
 
-    // 5. Criar o empréstimo
     const emprestimo = await Emprestimo.create({
         usuario_id: idUsuario,
         exemplar_id: idExemplar,
@@ -57,8 +49,6 @@ async function criarEmprestimo(idUsuario, idExemplar) {
         transaction: transacao
     });
 
-
-    // 6. Mudar o status do exemplar para "emprestado"
 
     exemplar.status = "emprestado";
     await exemplar.save({
@@ -74,4 +64,146 @@ async function criarEmprestimo(idUsuario, idExemplar) {
   }
 }
 
-module.exports = {criarEmprestimo};
+async function listarEmprestimos(idUsuario, perfil) {
+  const filtro = {};
+
+    if (perfil !== "administrador") {
+        filtro.usuario_id = idUsuario;
+    }
+
+  const emprestimos = await Emprestimo.findAll({
+    where: filtro,
+    order: [["created_at", "DESC"]],
+  });
+
+  return emprestimos;
+}
+
+async function buscarEmprestimo(idEmprestimo, idUsuario, perfil) {
+    const emprestimo = await Emprestimo.findByPk(idEmprestimo);
+
+    if (!emprestimo) {
+        const erro = new Error("Emprestimo nao encontrado");
+        erro.status = 404;
+        throw erro;
+    }
+
+    if (perfil !== "administrador" && String(emprestimo.usuario_id) !== String(idUsuario)) {
+        const erro = new Error("Emprestimo nao encontrado");
+        erro.status = 404;
+        throw erro;
+    }
+
+    return emprestimo;
+}
+
+const VALOR_MULTA_POR_DIA = 1.0;
+
+async function devolverEmprestimo(idEmprestimo) {
+  const transacao = await Emprestimo.sequelize.transaction();
+
+  try {
+    const emprestimo = await Emprestimo.findByPk(idEmprestimo, {
+      transaction: transacao,
+    });
+
+    if (!emprestimo) {
+      const erro = new Error("Emprestimo nao encontrado");
+      erro.status = 404;
+      throw erro;
+    }
+
+    if (emprestimo.status !== "ativo") {
+      const erro = new Error("Empréstimo já devolvido ou cancelado");
+      erro.status = 409;
+      throw erro;
+    }
+
+    const hoje = new Date();
+    const dataPrevista = new Date(emprestimo.data_prevista_devolucao);
+    const diferencaEmDias = Math.ceil(
+      (hoje.getTime() - dataPrevista.getTime()) / (1000 * 60 * 60 * 24)
+    );
+    const diasAtraso = Math.max(0, diferencaEmDias);
+    const valorMulta = diasAtraso * VALOR_MULTA_POR_DIA;
+
+    emprestimo.status = "devolvido";
+    emprestimo.data_devolucao = hoje;
+    emprestimo.valor_multa = valorMulta;
+    await emprestimo.save({ transaction: transacao });
+
+    const exemplar = await Exemplar.findByPk(emprestimo.exemplar_id, {
+      transaction: transacao,
+    });
+
+    if (!exemplar) {
+      const erro = new Error("Exemplar nao encontrado");
+      erro.status = 404;
+      throw erro;
+    }
+
+    exemplar.status = "disponivel";
+    await exemplar.save({ transaction: transacao });
+
+    await transacao.commit();
+    return emprestimo;
+  } catch (erro) {
+    await transacao.rollback();
+    throw erro;
+  }
+}
+
+const LIMITE_RENOVACOES = 3;
+const PRAZO_EMPRESTIMO_DIAS = 14;
+
+async function renovarEmprestimo(idEmprestimo, idUsuario, perfil) {
+    const emprestimo = await Emprestimo.findByPk(idEmprestimo);
+
+    if (!emprestimo) {
+        const erro = new Error("Emprestimo nao encontrado");
+        erro.status = 404;
+        throw erro;
+    }
+
+
+    if (perfil !== "administrador" && String(emprestimo.usuario_id) !== String(idUsuario)) {
+        const erro = new Error("Emprestimo nao encontrado");
+        erro.status = 404;
+        throw erro;
+    }
+
+    if (emprestimo.status !== "ativo") {
+      const erro = new Error("Empréstimo já devolvido ou cancelado");
+      erro.status = 409;
+      throw erro;
+    }
+
+    if (new Date(emprestimo.data_prevista_devolucao) < new Date()) {
+      const erro = new Error("Não é possível renovar um empréstimo em atraso");
+      erro.status = 400;
+      throw erro;
+    }
+
+    if ((emprestimo.renovacoes || 0) >= LIMITE_RENOVACOES) {
+      const erro = new Error("Limite de renovações atingido");
+      erro.status = 400;
+      throw erro;
+    }
+
+    const novaDataPrevista = new Date(emprestimo.data_prevista_devolucao);
+    novaDataPrevista.setDate(novaDataPrevista.getDate() + PRAZO_EMPRESTIMO_DIAS);
+    emprestimo.data_prevista_devolucao = novaDataPrevista;
+    emprestimo.renovacoes = (emprestimo.renovacoes || 0) + 1;
+    await emprestimo.save();
+
+  return emprestimo;
+}
+
+
+module.exports = {
+  criarEmprestimo,
+  listarEmprestimos,
+  buscarEmprestimo,
+  devolverEmprestimo,
+  renovarEmprestimo
+};

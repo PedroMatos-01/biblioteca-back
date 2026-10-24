@@ -59,5 +59,13 @@ routes.delete('/usuarios/:id', UsuarioController.delete);
 
 
 routes.post('/emprestimos', EmprestimoController.store);
+routes.get('/emprestimos',EmprestimoController.index);
+routes.get("/emprestimos/:id",EmprestimoController.show);
+routes.patch(
+    "/emprestimos/:id/devolucao",
+    authorization('administrador'),
+    EmprestimoController.devolucao
+);
+routes.patch("/emprestimos/:id/renovacao", EmprestimoController.renovacao);
 
 module.exports = routes;
