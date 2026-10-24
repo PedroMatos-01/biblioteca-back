@@ -10,7 +10,7 @@ const LivroControllers = require('./apps/controllers/LivroControllers');
 const UsuarioController = require('./apps/controllers/UsuarioController');
 const AuthController = require('./apps/controllers/AuthController');
 const AutheticationMiddleware = require('./apps/middlewares/authentication');
-
+const EmprestimoController = require('./apps/controllers/EmprestimoController');
 
 routes.get('/health', (req, res) => {
     return res.send({ message: 'Connected withew sucesse' });
@@ -57,5 +57,7 @@ routes.patch('/usuarios/:id/perfil',
 routes.delete('/usuarios/:id', UsuarioController.delete);
 
 
+
+routes.post('/emprestimos', EmprestimoController.store);
 
 module.exports = routes;
