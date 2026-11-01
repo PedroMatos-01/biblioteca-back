@@ -68,4 +68,7 @@ routes.patch(
 );
 routes.patch("/emprestimos/:id/renovacao", EmprestimoController.renovacao);
 
+
+routes.post('/livros/isbn', authorization('administrador'), LivroControllers.createPorIsbn);
+
 module.exports = routes;

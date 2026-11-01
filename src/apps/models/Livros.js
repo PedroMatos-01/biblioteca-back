@@ -5,8 +5,10 @@ class Livros extends Model{
     static init(sequelize){
         super.init(
             {
-                titulo:Sequelize.STRING,
-                autor:Sequelize.STRING,
+                titulo: Sequelize.STRING,
+                autor: Sequelize.STRING,
+                isbn: Sequelize.STRING,
+                capa: Sequelize.STRING,
             },
             {
                 sequelize,
