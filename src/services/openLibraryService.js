@@ -11,7 +11,7 @@ async function buscarLivroPorIsbn(isbn) {
   const livro = dados[chave];
 
   if (!livro) {
-    return null; // ISBN não encontrado
+    return null; 
   }
 
   return {
