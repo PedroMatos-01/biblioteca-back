@@ -40,33 +40,22 @@ class ExemplarController {
         return res.json(exemplar);
     }
 
-async delete(request, response) {
-  try {
-    if (request.perfil !== "administrador") {
-      return response.status(403).json({
-        mensagem: "Apenas administradores podem excluir exemplares",
-      });
+    async delete(request, response) {
+      const exemplar = await Exemplar.findByPk(request.params.id);
+
+      if (!exemplar) {
+        return response.status(404).json({ erro: "Exemplar nao encontrado" });
+      }
+
+      if (exemplar.status !== "disponivel") {
+        return response.status(409).json({
+          erro: "Apenas exemplares disponiveis podem ser excluidos"
+        });
+      }
+
+      await exemplar.destroy();
+      return response.status(204).send();
     }
-
-    const exemplar = await Exemplar.findByPk(request.params.id);
-
-    if (!exemplar) {
-      return response.status(404).json({ mensagem: "Exemplar nao encontrado" });
-    }
-
-    if (exemplar.status !== "disponivel") {
-      return response.status(409).json({
-        mensagem: "Apenas exemplares disponiveis podem ser excluidos",
-      });
-    }
-
-    await exemplar.destroy();
-    return response.status(204).send();
-  } catch (erro) {
-    console.error(erro);
-    return response.status(500).json({ mensagem: "Erro interno do servidor" });
-  }
-}
 }
 
 

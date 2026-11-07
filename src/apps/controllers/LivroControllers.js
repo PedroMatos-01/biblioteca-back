@@ -40,37 +40,26 @@ class LivroController {
     }
 
 
-async delete(request, response) {
-  try {
-    if (request.perfil !== "administrador") {
-      return response.status(403).json({
-        mensagem: "Apenas administradores podem excluir livros"
-      });
+    async delete(request, response) {
+        const livro = await Livros.findByPk(request.params.id);
+
+        if (!livro) {
+            return response.status(404).json({ erro: "Livro nao encontrado" });
+        }
+
+        const quantidadeExemplares = await Exemplar.count({
+            where: { livro_id: livro.id }
+        });
+
+        if (quantidadeExemplares > 0) {
+            return response.status(409).json({
+            erro: "Remova os exemplares antes de excluir o livro"
+            });
+        }
+
+        await livro.destroy();
+        return response.status(204).send();
     }
-
-    const livro = await Livros.findByPk(request.params.id);
-
-    if (!livro) {
-      return response.status(404).json({ mensagem: "Livro nao encontrado" });
-    }
-
-    const quantidadeExemplares = await Exemplar.count({
-      where: { livro_id: livro.id }
-    });
-
-    if (quantidadeExemplares > 0) {
-      return response.status(409).json({
-        mensagem: "Remova os exemplares antes de excluir o livro"
-      });
-    }
-
-    await livro.destroy();
-    return response.status(204).send();
-  } catch (erro) {
-    console.error(erro);
-    return response.status(500).json({ mensagem: "Erro interno do servidor" });
-  }
-}
 
 
 
