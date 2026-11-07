@@ -1,0 +1,824 @@
+{
+  "info": {
+    "_postman_id": "15cdae22-0366-4150-85fb-5c06589e1d68",
+    "name": "Biblioteca",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "58703315",
+    "_collection_link": "https://go.postman.co/collection/58703315-15cdae22-0366-4150-85fb-5c06589e1d68?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Livros",
+      "item": [
+        {
+          "name": "health",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{bearer_token_1d6l}}"
+              }
+            ],
+            "url": {
+              "raw": "{{API_URL}}/health",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "health"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "livro",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token(adm)}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"titulo\":\"Sherek\",\r\n    \"autor\":\"Finerbace\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{API_URL}}/livros",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "livros"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "index",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token(leitor)}}"
+              }
+            ],
+            "url": {
+              "raw": "{{API_URL}}/livros",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "livros"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "show",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token(leitor)}}"
+              }
+            ],
+            "url": {
+              "raw": "{{API_URL}}/livros/:id",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "livros",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "create",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"titulo\":\"fiufiu\",\n    \"autor\":\"pedroca00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{API_URL}}/livros",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "livros"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token(adm)}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"titulo\":\"Carlos\",\r\n    \"autor\":\"vicente\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{API_URL}}/livros/:id",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "livros",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "2"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{API_URL}}/livro/:id",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "livro",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "livroPorISBN",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{bearer_token_13tv}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"isbn\": \"9780140328721\" }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{API_URL}}/livros/isbn",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "livros",
+                "isbn"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Exemplares",
+      "item": [
+        {
+          "name": "index",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token(adm)}}"
+              }
+            ],
+            "url": {
+              "raw": "{{API_URL}}/livros/:id/exemplares",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "livros",
+                ":id",
+                "exemplares"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "2"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "show",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token(adm)}}"
+              }
+            ],
+            "url": {
+              "raw": "{{API_URL}}/exemplares/:id",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "exemplares",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{bearer_token_1c1g}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"codigo\": \"EX004\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{API_URL}}/livros/:id/exemplares",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "livros",
+                ":id",
+                "exemplares"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "5"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token(adm)}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{API_URL}}/exemplares/:id",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "exemplares",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{API_URL}}/exemplares/:id",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "exemplares",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Usuario",
+      "item": [
+        {
+          "name": "create",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nome\":\"Pedro\",\r\n    \"email\":\"seinao@gmail.com\",\r\n    \"senha\":\"pedroca01\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{API_URL}}/usuarios",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "me",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{API_URL}}/usuarios/me",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "usuarios",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "index",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token(adm)}}"
+              }
+            ],
+            "url": {
+              "raw": "{{API_URL}}/usuarios",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "updatePerfil",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"perfil\": \"leitor\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{API_URL}}/usuarios/:id/perfil",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "usuarios",
+                ":id",
+                "perfil"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token(adm)}}"
+              }
+            ],
+            "url": {
+              "raw": "{{API_URL}}/usuarios/:id",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "usuarios",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "8"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{token}}",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const resposta = pm.response.json();\r\nif (resposta.token) {\r\n    pm.collectionVariables.set(\"token\", resposta.token);\r\n}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nome\":\"Pedro\",\n    \"email\":\"seinao@gmail.com\",\n    \"senha\":\"pedroca01\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{API_URL}}/auth",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "auth"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "redefinir-senha",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"token\": \"e5ceeb206d82e3eddb1fcc85ad5e92efc91e7acfb5ecd1af1b62f70148469c08\",\n    \"novaSenha\": \"novasenha123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{API_URL}}/auth/redefinir-senha",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "auth",
+                "redefinir-senha"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "esqueci-senha Copy",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\":\"ph987654ee3@gmail.com\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{API_URL}}/auth/esqueci-senha",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "auth",
+                "esqueci-senha"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Emprestimo",
+      "item": [
+        {
+          "name": "store",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{bearer_token_0rhq}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": " {\r\n    \"exemplar_id\": 6,\r\n    \"usuario_id\": 2\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{API_URL}}/emprestimos",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "emprestimos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "index",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{bearer_token_07hu}}"
+              }
+            ],
+            "url": {
+              "raw": "{{API_URL}}/emprestimos",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "emprestimos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "show",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{bearer_token_0rhq}}"
+              }
+            ],
+            "url": {
+              "raw": "{{API_URL}}/emprestimos/:id",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "emprestimos",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "devolucao",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{bearer_token_07hu}}"
+              }
+            ],
+            "url": {
+              "raw": "{{API_URL}}/emprestimos/:id/devolucao",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "emprestimos",
+                ":id",
+                "devolucao"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "renovacao",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{bearer_token_07hu}}"
+              }
+            ],
+            "url": {
+              "raw": "{{API_URL}}/emprestimos/:id/renovacao",
+              "host": [
+                "{{API_URL}}"
+              ],
+              "path": [
+                "emprestimos",
+                ":id",
+                "renovacao"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "token",
+      "value": ""
+    }
+  ]
+}
