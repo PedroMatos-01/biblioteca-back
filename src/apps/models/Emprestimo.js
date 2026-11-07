@@ -23,17 +23,18 @@ class Emprestimo extends Model {
                     allowNull: true
                 },
 
+                valor_multa: Sequelize.DECIMAL(10, 2),
+
                 status: {
                     type: Sequelize.STRING,
                     allowNull: false,
                     defaultValue: 'ativo'
                 },
-                
+
                 exemplar_id: {
                     type: Sequelize.INTEGER,
                     allowNull: false,
                 },
-
             },
             {
                 sequelize,
