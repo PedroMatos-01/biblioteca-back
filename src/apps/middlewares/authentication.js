@@ -14,7 +14,7 @@ module.exports = (req, res, next) => {
     }
 
     try {
-        const payload = jwt.verify(token, process.env.HASH_BCRYPT);
+        const payload = jwt.verify(token, process.env.JWT_SECRET);
 
         req.usuarioId = payload.id;
         req.perfil = payload.perfil;
