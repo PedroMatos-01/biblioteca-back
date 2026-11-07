@@ -20,18 +20,26 @@ services:
     ports:
       - "3000:3000"
     environment:
+      DEMO_MODE: "true"
       PORT: 3000
       DIALECT: mysql
       HOST: db
       DB_USERNAME: root
-      PASSWORD: root
+      PASSWORD: ${DB_PASSWORD:-root}
       DATABASE: biblioteca
       DB_PORT: 3306
+      JWT_SECRET: ${JWT_SECRET:-chave-de-desenvolvimento-troque-em-producao}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:5173}
+      MAIL_HOST: ${MAIL_HOST:-}
+      MAIL_PORT: ${MAIL_PORT:-2525}
+      MAIL_USER: ${MAIL_USER:-}
+      MAIL_PASS: ${MAIL_PASS:-}
+      MAIL_FROM: "${MAIL_FROM:-Biblioteca <nao-responda@biblioteca.com>}"
     depends_on:
       db:
         condition: service_healthy
     restart: on-failure
-    command: sh -c "yarn sequelize-cli db:migrate && node src/server.js"
+    command: sh -c "yarn sequelize-cli db:migrate && yarn sequelize-cli db:seed:all && node src/server.js"
 
 volumes:
   dados:
